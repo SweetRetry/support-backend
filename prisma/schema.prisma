@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  roleId    String?
+  role      Role?    @relation(fields: [roleId], references: [id])
+}
+
+model Role {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String?
+  editable    Boolean      @default(true)
+  permissions Permission[] @relation(name: "RolePermissions")
+  User        User[]
+}
+
+model Permission {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String?
+  roles       Role[]  @relation(name: "RolePermissions")
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  articles  Article[]
+
+  @@map("categories")
+}
+
+enum ArticleStatus {
+  DRAFT
+  UNDER_REVIEW
+  UNPUBLISHED
+  PENDING
+  PUBLISHED
+  DELETED
+}
+
+model Article {
+  id          String        @id @default(cuid())
+  title       String
+  content     String        @db.LongText
+  description String        @db.Text
+  status      ArticleStatus @default(DRAFT)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  category    Category?     @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+}
