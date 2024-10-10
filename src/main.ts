@@ -6,6 +6,7 @@ import { AllExceptionsFilter } from './filters/all-exceptions.filter';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { ZodExceptionFilter } from './filters/zod-exceptions.filter';
 import { INestApplication } from '@nestjs/common';
+import { LanguageInterceptor } from './interceptors/language.interceptor';
 
 function initSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -23,7 +24,9 @@ async function bootstrap() {
 
   initSwagger(app);
 
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  app
+    .useGlobalInterceptors(new ResponseInterceptor())
+    .useGlobalInterceptors(new LanguageInterceptor());
 
   app.useGlobalPipes(new ZodValidationPipe());
 

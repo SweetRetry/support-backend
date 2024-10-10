@@ -1,14 +1,41 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
+
 import { UserModule } from './user/user.module';
 import { RoleModule } from './role/role.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { UserGuard } from './guards/user.guard';
+import { CategoryModule } from './category/category.module';
+import { ArticleModule } from './article/article.module';
+import { PermissionGuard } from './guards/permission.guard';
 
 @Module({
-  imports: [AuthModule, UserModule, RoleModule, PrismaModule],
+  imports: [
+    UserModule,
+    RoleModule,
+    PrismaModule,
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1d' },
+    }),
+    CategoryModule,
+    ArticleModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: UserGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
+  ],
 })
 export class AppModule {}
