@@ -19,4 +19,7 @@ export class CreateUserDto extends createZodDto(createUserSchema) {
     description: 'User password',
   })
   password: string;
+
+  @ApiProperty()
+  roleId?: string;
 }

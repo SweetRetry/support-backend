@@ -38,7 +38,7 @@ describe('UserService', () => {
 
       const prismaCreateSpy = jest
         .spyOn(prismaService.user, 'create')
-        // @ts-ignore
+        // @ts-expect-error: assume prisma.user.create returns a Promise
         .mockResolvedValue({
           id: 'uuid',
           email,
@@ -47,7 +47,7 @@ describe('UserService', () => {
           // roleId: null,
         });
 
-      const result = await service.register(email, password);
+      const result = await service.createOne({ email, password });
 
       // 断言密码已经加密
       expect(hash).toHaveBeenCalledWith(password, 10);

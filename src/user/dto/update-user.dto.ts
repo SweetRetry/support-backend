@@ -5,16 +5,17 @@ import { z } from 'zod';
 export const updateUserPasswordSchema = z.object({
   id: z.string(),
   password: z.string(),
+  oldPassword: z.string(),
 });
 
 export class UpdateUserPasswordDto extends createZodDto(
   updateUserPasswordSchema,
 ) {
   @ApiProperty()
-  id: string;
+  password: string;
 
   @ApiProperty()
-  password: string;
+  oldPassword: string;
 }
 
 export const updateUserRoleSchema = z.object({
@@ -23,9 +24,6 @@ export const updateUserRoleSchema = z.object({
 });
 
 export class UpdateUserRoleDto extends createZodDto(updateUserPasswordSchema) {
-  @ApiProperty()
-  id: string;
-
   @ApiProperty()
   roleId: string;
 }
