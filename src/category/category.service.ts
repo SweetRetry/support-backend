@@ -46,7 +46,7 @@ export class CategoryService {
       },
     });
     if (category?.articles.length) {
-      throw new BadRequestException();
+      throw new BadRequestException('Category has articles');
     }
     const deleteCategory = await this.prisma.category.delete({
       where: {

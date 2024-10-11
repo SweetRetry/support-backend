@@ -11,4 +11,8 @@ export enum PermissionEnum {
   CREATE_ROLE = 'role:create',
   DELETE_ROLE = 'role:delete',
   EDIT_ROLE = 'role:edit',
+
+  CREATE_CATEGORY = 'category:create',
+  DELETE_CATEGORY = 'category:delete',
+  EDIT_CATEGORY = 'category:edit',
 }
