@@ -1,16 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CategoryService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createCategoryDto: CreateCategoryDto) {
+  async create(language: string, name: string) {
     return await this.prisma.category.create({
       data: {
-        name: createCategoryDto.name,
-        language: createCategoryDto.language,
+        name,
+        language,
       },
     });
   }
@@ -34,11 +33,30 @@ export class CategoryService {
     });
   }
 
-  update(id: string, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
-  }
+  async remove(language: string, id: string) {
+    const category = await this.prisma.category.findUnique({
+      where: {
+        id_language: {
+          id,
+          language,
+        },
+      },
+      include: {
+        articles: true,
+      },
+    });
+    if (category?.articles.length) {
+      throw new BadRequestException();
+    }
+    const deleteCategory = await this.prisma.category.delete({
+      where: {
+        id_language: {
+          id,
+          language,
+        },
+      },
+    });
 
-  remove(id: string) {
-    return `This action removes a #${id} category`;
+    return deleteCategory.id;
   }
 }

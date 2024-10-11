@@ -11,6 +11,7 @@ import { UserGuard } from './guards/user.guard';
 import { CategoryModule } from './category/category.module';
 import { ArticleModule } from './article/article.module';
 import { PermissionGuard } from './guards/permission.guard';
+import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -20,10 +21,11 @@ import { PermissionGuard } from './guards/permission.guard';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: '3d' },
     }),
     CategoryModule,
     ArticleModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [

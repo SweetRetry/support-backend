@@ -8,7 +8,7 @@ import {
 
 import { compare, hash, hashSync } from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
-import { Permission, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { RoleService } from 'src/role/role.service';
 import { UpdateUserPasswordDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';

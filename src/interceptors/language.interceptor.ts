@@ -12,7 +12,7 @@ export class LanguageInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
 
     // 获取 Accept-Language 头信息
-    const acceptLanguage = request['accept-language'] || 'en-US';
+    const acceptLanguage = request.headers['accept-language'] || 'en-US';
 
     console.log(
       '🚀 ~ LanguageInterceptor ~ intercept ~ acceptLanguage:',
